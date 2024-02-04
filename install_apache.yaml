@@ -3,10 +3,21 @@
 - hosts: all
   become: true
   tasks:
-    - name: install apache and php
-      package: 
+      
+    - name: install apache2 package
+      apt: 
         name: 
-          - "{{ apache_package }}"
-          - "{{ php_package }}"
+          - apache2
+          - libapache2-mod-php
         state: latest
         update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+    
+    - name: install apache2 package centOS
+      dnf: 
+        name: 
+          - httpd
+          - php
+        state: latest
+        update_cacheÇ yes
+      when: ansible_distribution == "CentOS"

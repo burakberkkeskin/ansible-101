@@ -1,4 +1,4 @@
-berk@192.168.1.150 apache_package=apache2 php_package=libapache2-mod-php
-berk@192.168.1.151 apache_package=apache2 php_package=libapache2-mod-php
-berk@192.168.1.152 apache_package=apache2 php_package=libapache2-mod-php
-berk@192.168.1.225 apache_package=httpd php_package=php
+berk@192.168.1.150
+berk@192.168.1.151
+berk@192.168.1.152
+berk@192.168.1.225
