@@ -16,10 +16,24 @@
         upgrade: dist
         update_cache: yes
       
+- hosts: workstations
+  become: true
+  tasks:
+    - name: install unzip
+      package:
+        name: unzip
+    - name: install terraform
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/1.7.2/terraform_1.7.2_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
+
 - hosts: web_servers
   become: true
   tasks: 
-
     - name: install apache2 package for Ubuntu 
       tags: apache,apache2,ubuntu
       when: ansible_distribution == "Ubuntu"
@@ -28,7 +42,6 @@
           - apache2
           - libapache2-mod-php
         state: latest
-    
     - name: install apache2 package for CentOS
       tags: apache,centos,httpd
       when: ansible_distribution == "CentOS"
@@ -37,7 +50,20 @@
           - httpd
           - php
         state: latest
-
+    - name: change e-mail address for admin
+      tags: apache,apache2,httpd
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin'
+        line: ServerAdmin admin@burakberk.dev
+      when: ansible_distribution == "CentOS"
+      register: httpd
+    - name: restart httpd (CentOS)
+      tags: apache,http,centos
+      service:
+        name: httpd
+        state: restarted
+      when: httpd.changed
     - name: copy static website files
       tags: apache,apache2,httpd
       copy:
@@ -46,7 +72,13 @@
         owner: root
         group: root
         mode: 0644
-
+    - name: start httpd (CentOS)
+      tags: apache,centos,httpd
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "CentOS"
 
 - hosts: db_servers
   become: true

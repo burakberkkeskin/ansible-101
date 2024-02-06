@@ -7,3 +7,6 @@ berk@192.168.1.151
 
 [file_servers]
 berk@192.168.1.152
+
+[workstations]
+berk@192.168.1.152
