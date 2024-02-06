@@ -38,6 +38,16 @@
           - php
         state: latest
 
+    - name: copy static website files
+      tags: apache,apache2,httpd
+      copy:
+        src: files/
+        dest: /var/www/html
+        owner: root
+        group: root
+        mode: 0644
+
+
 - hosts: db_servers
   become: true
   tasks:
